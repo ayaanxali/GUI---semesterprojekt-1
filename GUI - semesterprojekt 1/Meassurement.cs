@@ -16,6 +16,10 @@ namespace GUI___semesterprojekt_1
         private int numberOfPulse;
         private DateTime starttime;
         private DateTime stoptime;
+
+        //Test på 'Push' og 'pull
+
+
         public Meassurement(DateTime Starttid, DateTime Stoptid, int antalPuls)
         {
             int tid;
