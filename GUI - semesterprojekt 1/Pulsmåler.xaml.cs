@@ -23,30 +23,30 @@ namespace GUI___semesterprojekt_1
     /// </summary>
     public partial class MainWindow : Window
     {
-        //erklærer de 9 attributter 
-        private static RPi rpi = new RPi();
-        private static Key startKnap = new Key(rpi, Key.ID.P2);
-        private static PWM _pwm = new PWM(rpi);
-        private static PulseReader PR = new PulseReader(rpi, _pwm);
-        private static SevenSeg sevenseg = new SevenSeg(rpi);
-        private static PulsTilBCD pulsConverterBCD; // = new PulsTilBCD(0);
-        private static Led _hundredeDisplay = new Led(rpi, Led.ID.LD1);
+        // Erklærer de 9 attributter 
+        private static RPi _rpi = new RPi();
+        private static Key _startKnap = new Key(_rpi, Key.ID.P2);
+        private static PWM _pwm = new PWM(_rpi);
+        private static PulseReader _pulseReader = new PulseReader(_rpi, _pwm);
+        private static SevenSeg _sevenSeg = new SevenSeg(_rpi);
+        private static PulsTilBCD _pulsTilBCD;
+        private static Led _hundredeDisplay = new Led(_rpi, Led.ID.LD1);
         private bool resetBool = true;
         private bool knapTændt = false;
 
-        //bool breakOut = false;'
-
-        //erklærer attributter der relaterer sig til layout (er ikke skrevet i klassediagram)
-        private static Style cStyle = new Style(typeof(Border));
+        // Erklærer attributter der relaterer sig til layout (er ikke skrevet i klassediagram - spørg lene om dette)
+        private Style cStyle = new Style(typeof(Border));
         private double standartFontSize = 18;
         private SolidColorBrush enabled = new SolidColorBrush(Color.FromArgb(255, 211, 47, 47));
         private SolidColorBrush disabled = new SolidColorBrush(Color.FromArgb(255, 227, 95, 95));
-       
+        // Opretter annuller knappen
+        System.Windows.Controls.Button annuller_BT = new Button();
+
         public MainWindow()
         {
             InitializeComponent();
 
-            // opretter "Annuller"-knappen
+            // Definerer "Annuller"-knappens udseende
             annuller_BT.Click += annullerBT_Click;
             annuller_BT.Width = 185;
             annuller_BT.Height = 55;
@@ -62,16 +62,13 @@ namespace GUI___semesterprojekt_1
             annuller_BT.Resources.Add(typeof(Border),cStyle);
                        
         }
-        System.Windows.Controls.Button annuller_BT = new Button();
 
-
-        //Eventhandleren til annuller_BT oprettes
-        //protected void annullerBT_Click(object sender, EventArgs e)
+        // Eventhandleren til annuller_BT oprettes
         private void annullerBT_Click(object sender, EventArgs e)
         {
             resetLayout();
         }
-
+        // Metode til at resette layoutet
         private void resetLayout()
         {
             enable(KlargørMåling_BT);
@@ -80,17 +77,17 @@ namespace GUI___semesterprojekt_1
             resetBool = true;
         }
 
-        //Fire metoder vi selv har lavet oprettes
+        // Fire metoder vi selv har lavet oprettes
         private void showPulse()
         {
-            pulsConverterBCD = new PulsTilBCD(PR.getCalculatedPulse());
-            sevenseg.Init_SevenSeg();
-            sevenseg.Disp_SevenSeg(pulsConverterBCD.getPulsTilBCD());
+            _pulsTilBCD = new PulsTilBCD(_pulseReader.getCalculatedPulse());
+            _sevenSeg.Init_SevenSeg();
+            _sevenSeg.Disp_SevenSeg(_pulsTilBCD.getPulsTilBCD());
         }
 
         private void erOverHundrede()
         {
-            if (PR.getCalculatedPulse() >= 100)
+            if (_pulseReader.getCalculatedPulse() >= 100)
             {
                 _hundredeDisplay.on();
             }
@@ -111,51 +108,44 @@ namespace GUI___semesterprojekt_1
             name.IsEnabled = true;
         }
 
+        // Eventhandler for "Klargør måling"-knappen
         private void KlargørMåling_BT_Click(object sender, RoutedEventArgs e)
         {
+            // Disabler de to knapper
             disable(KlargørMåling_BT);
             disable(Reset_BT);
 
-            // skriver 00 på sevenSeg displaysne
-            sevenseg.Disp_SevenSeg(0);
+            // Skriver 00 på sevenSeg displaysne
+            _sevenSeg.Disp_SevenSeg(0);
             _hundredeDisplay.off();
-            rpi.wait(1000);
+            _rpi.wait(1000);
 
             while (knapTændt == false)
             {
-                
-                if (startKnap.isPressed())
+                if (_startKnap.isPressed())
                 {
 
                     knapTændt = true;
-                    PR.StartReading();
+                    _pulseReader.StartReading();
                     _pwm.SetPWM(100);
 
-
-                    // test af om metoden virker og får vist en messagebox
-                    //MessageBox.Show("Der er nu trykket på knappen 1. gang og en måling er i gang");
                 }
             }
-            //MessageBox.Show(knapTændt.ToString());
             while (knapTændt == true)
             {
-                if (startKnap.isPressed())
+                if (_startKnap.isPressed())
                 {
                     knapTændt = false;
-                    PR.StartReading();
+                    _pulseReader.StartReading();
                     showPulse();
                     erOverHundrede();
-                    //MessageBox.Show("Der er nu trykket på knappen 2. gang og en måling er afsluttet");
-                    Historik_LB.Items.Add(PR.ReadCalculatedPulse().ToString());
+                    Historik_LB.Items.Add(_pulseReader.ReadCalculatedPulse().ToString());
                     enable(KlargørMåling_BT);
                     enable(Reset_BT);
                 }
             }
-            sevenseg.Disp_SevenSeg(0x60);
-            rpi.wait(2000);
-            sevenseg.Disp_SevenSeg(0088);
         }
-
+        // Eventhandler for "Reset historik"-knappen
         private void Reset_BT_Click(object sender, RoutedEventArgs e)
         {
             if (resetBool)

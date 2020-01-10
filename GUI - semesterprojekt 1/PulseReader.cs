@@ -12,10 +12,10 @@ namespace GUI___semesterprojekt_1
 {
     class PulseReader
     {
-        //Erklærer de (x) atributter
+        // Erklærer de 8 atributter
         public Meassurement _meassurement;
 
-        // kan vi gøre disse t0 atributter til lokale variabler i stedet?
+        // Kan vi gøre disse to attributter til lokale variabler i stedet?
         private DateTime _starttid;
         private DateTime _stoptid;
 
@@ -25,22 +25,22 @@ namespace GUI___semesterprojekt_1
         private Puls puls;
         private int antalPuls;
 
-        //Opretter cunstructoren. Denne tager 2 parametre, som er RPI'en og den givne pulsbreddemodulation
+        // Opretter cunstructoren. Denne tager 2 parametre, som er RPI'en og den givne pulsbreddemodulation
         public PulseReader(RPi rpi, PWM pwm)
         {
             _pwm = pwm;
             _rpi = rpi;
             puls = new Puls(rpi);
-            //antalPuls = puls.ReadPuls();
+            // antalPuls = puls.ReadPuls();
         }
 
-        //returnerer et historik-element med starttid, stoptid og antal puls 
+        // Returnerer et historik-element med starttid, stoptid og antal puls 
         public Meassurement ReadCalculatedPulse()
         {
             return _meassurement;
         }
 
-        // returnerer den beregnede puls 
+        // Returnerer den beregnede puls 
         public int getCalculatedPulse()
         {
             return _meassurement.getPulse();
