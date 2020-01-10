@@ -12,16 +12,17 @@ namespace GUI___semesterprojekt_1
 {
     class PulseReader
     {
+        //Erklærer de 8 atributter
         public Meassurement M1;
         private DateTime _starttid;
         private DateTime _stoptid;
         private PWM _pwm;
-        bool startBool = true;
-
+        private bool startBool = true;
         private RPi _rpi;
         private Puls puls;
         private int antalPuls;
 
+        //Opretter cunstructoren. Denne tager 2 parametre, som er RPI'en og den givne pulsbreddemodulation
         public PulseReader(RPi rpi, PWM pwm)
         {
             _pwm = pwm;
@@ -30,17 +31,19 @@ namespace GUI___semesterprojekt_1
             //antalPuls = puls.ReadPuls();
         }
 
-        public Meassurement ReadCalculatedPulse() //spørg lene om typen af denne metode (messurement/int?- ift. klassediagrammet)
+        //returnerer et historik-element med starttid, stoptid og antal puls 
+        public Meassurement ReadCalculatedPulse()
         {
             return M1;
         }
 
+        // returnerer den beregnede puls 
         public int getCalculatedPulse()
         {
             return M1.getPulse();
         }
 
-        // Denne metode skal initialiseres af start/stop knappen på pulsmålerkassen. 
+        // Denne metode starter/stopper pulsmåling og skal initialiseres af start/stop knappen på pulsmålerkassen. 
         public void StartReading()
         {
             if (startBool == true)

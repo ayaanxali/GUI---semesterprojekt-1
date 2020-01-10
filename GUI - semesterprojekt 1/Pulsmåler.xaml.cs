@@ -23,6 +23,7 @@ namespace GUI___semesterprojekt_1
     /// </summary>
     public partial class MainWindow : Window
     {
+        //erklærer de 9 attributter 
         private static RPi rpi = new RPi();
         private static Key startKnap = new Key(rpi, Key.ID.P2);
         private static PWM _pwm = new PWM(rpi);
@@ -30,19 +31,22 @@ namespace GUI___semesterprojekt_1
         private static SevenSeg sevenseg = new SevenSeg(rpi);
         private static PulsTilBCD pulsConverterBCD; // = new PulsTilBCD(0);
         private static Led _hundredeDisplay = new Led(rpi, Led.ID.LD1);
-        private static Style cStyle = new Style(typeof(Border));
+        private bool resetBool = true;
+        private bool knapTændt = false;
 
-        double standartFontSize = 18;
-        bool resetBool = true;
-        bool knapTændt = false;
-        //bool breakOut = false;
-        SolidColorBrush enabled = new SolidColorBrush(Color.FromArgb(255, 211, 47, 47));
-        SolidColorBrush disabled = new SolidColorBrush(Color.FromArgb(255, 227, 95, 95));
+        //bool breakOut = false;'
+
+        //erklærer attributter der relaterer sig til layout (er ikke skrevet i klassediagram)
+        private static Style cStyle = new Style(typeof(Border));
+        private double standartFontSize = 18;
+        private SolidColorBrush enabled = new SolidColorBrush(Color.FromArgb(255, 211, 47, 47));
+        private SolidColorBrush disabled = new SolidColorBrush(Color.FromArgb(255, 227, 95, 95));
        
         public MainWindow()
         {
             InitializeComponent();
 
+            // opretter "Annuller" knappen
             annuller_BT.Click += annullerBT_Click;
             annuller_BT.Width = 185;
             annuller_BT.Height = 55;
