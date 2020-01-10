@@ -67,7 +67,7 @@ namespace GUI___semesterprojekt_1
                 
                 _meassurement = new Meassurement(_starttid, _stoptid, antalPuls);
                
-                _pwm.SetPWM(25);
+                _pwm.SetPWM(20);
             }
         }
     }

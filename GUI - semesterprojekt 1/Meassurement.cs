@@ -21,16 +21,16 @@ namespace GUI___semesterprojekt_1
         // Laver constructoren - denne tager tre af attributterne som parametre
         public Meassurement(DateTime Starttid, DateTime Stoptid, int antalPuls)
         {
-            int tid;
+            double tid;
             starttime = Starttid;
             stoptime = Stoptid;
             numberOfPulse = antalPuls;
             TimeSpan måleTid = (stoptime - starttime);
             
             // Sørger for, at vi ikke får en nulreference når pulsobjektet oprettes
-            if (måleTid.TotalMinutes > 0.15)
+            if (måleTid.TotalMinutes > 0.01)
             {
-                tid = Convert.ToInt32(Math.Round(numberOfPulse / Convert.ToDouble(måleTid.TotalMinutes)));
+                tid = Convert.ToDouble(måleTid.TotalMinutes);
             }
             else
             {
@@ -38,7 +38,7 @@ namespace GUI___semesterprojekt_1
                 tid = 1;
             }
 
-            calculatedPulse = numberOfPulse / tid;
+            calculatedPulse = Convert.ToInt32(numberOfPulse / tid);
         }
         // Returnerer den beregnede puls 
         public int getPulse()

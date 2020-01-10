@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI___semesterprojekt_1"
         mc:Ignorable="d"
-        Title="Pulsmåler" Height="450" Width="700">
+        Title="Pulsmåler" Height="450" Width="700"
+        Closed = "Window_Closed">
 
     <Grid x:Name="mitGitter">
         <Grid.ColumnDefinitions>

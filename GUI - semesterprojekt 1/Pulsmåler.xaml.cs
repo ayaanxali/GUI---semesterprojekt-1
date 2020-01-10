@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel; //CloseEventArgs
 using RPI;
 using RPI.Display;
 using RPI.Controller;
@@ -24,27 +25,37 @@ namespace GUI___semesterprojekt_1
     public partial class MainWindow : Window
     {
         // Erklærer de 9 attributter 
-        private static RPi _rpi = new RPi();
-        private static Key _startKnap = new Key(_rpi, Key.ID.P2);
-        private static PWM _pwm = new PWM(_rpi);
-        private static PulseReader _pulseReader = new PulseReader(_rpi, _pwm);
-        private static SevenSeg _sevenSeg = new SevenSeg(_rpi);
-        private static PulsTilBCD _pulsTilBCD;
-        private static Led _hundredeDisplay = new Led(_rpi, Led.ID.LD1);
+        private RPi _rpi;
+        private Key _startKnap;
+        private PWM _pwm;
+        private PulseReader _pulseReader;
+        private SevenSeg _sevenSeg;
+        private Led _hundredeDisplay;
+        private PulsTilBCD _pulsTilBCD;
         private bool resetBool = true;
         private bool knapTændt = false;
 
         // Erklærer attributter der relaterer sig til layout (er ikke skrevet i klassediagram - spørg lene om dette)
-        private Style cStyle = new Style(typeof(Border));
-        private double standartFontSize = 18;
-        private SolidColorBrush enabled = new SolidColorBrush(Color.FromArgb(255, 211, 47, 47));
-        private SolidColorBrush disabled = new SolidColorBrush(Color.FromArgb(255, 227, 95, 95));
+        private Style cStyle;
+        private double standartFontSize;
+        private SolidColorBrush enabledColor;
         // Opretter annuller knappen
-        System.Windows.Controls.Button annuller_BT = new Button();
+        System.Windows.Controls.Button annuller_BT; 
 
         public MainWindow()
         {
             InitializeComponent();
+            _rpi = new RPi();
+            _startKnap = new Key(_rpi, Key.ID.P1);
+            _pwm = new PWM(_rpi);
+            _pulseReader = new PulseReader(_rpi, _pwm);
+            _sevenSeg = new SevenSeg(_rpi);
+            _hundredeDisplay = new Led(_rpi, Led.ID.LD1);
+            standartFontSize = 18;
+            enabledColor = new SolidColorBrush(Color.FromArgb(255, 211, 47, 47));
+            annuller_BT = new Button();
+            cStyle = new Style(typeof(Border));
+
 
             // Definerer "Annuller"-knappens udseende
             annuller_BT.Click += annullerBT_Click;
@@ -53,18 +64,27 @@ namespace GUI___semesterprojekt_1
             annuller_BT.Content = "ANNULLER";
             annuller_BT.FontFamily = new FontFamily("Yu Gothic");
             annuller_BT.FontSize = standartFontSize;
-            annuller_BT.Name = "Annuller";
+            annuller_BT.Name = "ANNULLER";
             annuller_BT.HorizontalAlignment = HorizontalAlignment.Left;
             annuller_BT.VerticalAlignment = VerticalAlignment.Top;
             annuller_BT.Margin = new Thickness(40, 170, 0, 0);
 
             cStyle.Setters.Add(new Setter(Border.CornerRadiusProperty, new CornerRadius(50.0)));
-            annuller_BT.Resources.Add(typeof(Border),cStyle);
-                       
+            annuller_BT.Resources.Add(typeof(Border),cStyle);    
         }
 
-        // Eventhandleren til annuller_BT oprettes
-        private void annullerBT_Click(object sender, EventArgs e)
+        // Eventhandleren slukker for status LED og alle 7-segments displays
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            MessageBox.Show("Programmet lukker nu");
+            _pwm.SetPWM(0);
+            _pwm.StopPWM();
+            _hundredeDisplay.off();
+            _sevenSeg.Close_SevenSeg();
+        }
+
+         // Eventhandleren til annuller_BT oprettes
+         private void annullerBT_Click(object sender, EventArgs e)
         {
             resetLayout();
         }
@@ -95,15 +115,13 @@ namespace GUI___semesterprojekt_1
 
         private void disable(Button name)
         {
-            
             name.IsEnabled = false;
-            name.Background = disabled;
             name.Foreground = Brushes.LightGray;
         }
 
         private void enable(Button name)
         {
-            name.Background = enabled;
+            name.Background = enabledColor;
             name.Foreground = Brushes.White;
             name.IsEnabled = true;
         }
@@ -116,9 +134,8 @@ namespace GUI___semesterprojekt_1
             disable(Reset_BT);
 
             // Skriver 00 på sevenSeg displaysne
-            _sevenSeg.Disp_SevenSeg(0);
+            _sevenSeg.Disp_SevenSeg(00);
             _hundredeDisplay.off();
-            _rpi.wait(1000);
 
             while (knapTændt == false)
             {
@@ -165,13 +182,17 @@ namespace GUI___semesterprojekt_1
                 resetLayout();
                 Historik_LB.Items.Clear();
                 Historik_LB.Items.Add("Dato\t\t Puls");
+                _pwm.SetPWM(100);
+                _rpi.wait(1000);
+                _pwm.SetPWM(20);
             }
         }
 
         private void Historik_LB_Loaded(object sender, RoutedEventArgs e)
         {
             _pwm.InitPWM();
-            _pwm.SetPWM(20);
+            _pwm.SetPWM(20);         
+            MessageBox.Show("Vi er her nu");
             Historik_LB.Items.Add("Dato\t\t\t Puls");
 
             cStyle.Setters.Add(new Setter(Border.CornerRadiusProperty, new CornerRadius(50.0)));
@@ -181,6 +202,8 @@ namespace GUI___semesterprojekt_1
             KlargørMåling_BT.Resources.Add(typeof(Border), cStyle);
             Reset_BT.Resources.Add(typeof(Border), cStyle);
         }
+
+        
 
     }
 }
