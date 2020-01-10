@@ -46,7 +46,7 @@ namespace GUI___semesterprojekt_1
         {
             InitializeComponent();
 
-            // opretter "Annuller" knappen
+            // opretter "Annuller"-knappen
             annuller_BT.Click += annullerBT_Click;
             annuller_BT.Width = 185;
             annuller_BT.Height = 55;

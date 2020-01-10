@@ -12,12 +12,15 @@ namespace GUI___semesterprojekt_1
 {
     class PulseReader
     {
-        //Erklærer de 8 atributter
-        public Meassurement M1;
+        //Erklærer de (x) atributter
+        public Meassurement _meassurement;
+
+        // kan vi gøre disse t0 atributter til lokale variabler i stedet?
         private DateTime _starttid;
         private DateTime _stoptid;
-        private PWM _pwm;
+
         private bool startBool = true;
+        private PWM _pwm;
         private RPi _rpi;
         private Puls puls;
         private int antalPuls;
@@ -34,18 +37,19 @@ namespace GUI___semesterprojekt_1
         //returnerer et historik-element med starttid, stoptid og antal puls 
         public Meassurement ReadCalculatedPulse()
         {
-            return M1;
+            return _meassurement;
         }
 
         // returnerer den beregnede puls 
         public int getCalculatedPulse()
         {
-            return M1.getPulse();
+            return _meassurement.getPulse();
         }
 
         // Denne metode starter/stopper pulsmåling og skal initialiseres af start/stop knappen på pulsmålerkassen. 
         public void StartReading()
         {
+            
             if (startBool == true)
             {
                 _rpi.wait(250);
@@ -61,7 +65,7 @@ namespace GUI___semesterprojekt_1
                 startBool = true;
                 antalPuls = puls.ReadPuls();
                 
-                M1 = new Meassurement(_starttid, _stoptid, antalPuls);
+                _meassurement = new Meassurement(_starttid, _stoptid, antalPuls);
                
                 _pwm.SetPWM(25);
             }
