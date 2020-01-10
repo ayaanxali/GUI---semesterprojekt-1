@@ -12,7 +12,7 @@ namespace GUI___semesterprojekt_1
 {
     class PulseReader
     {
-        // Erklærer de 8 atributter
+        // Erklærer de 8 attributter
         public Meassurement _meassurement;
 
         // Kan vi gøre disse to attributter til lokale variabler i stedet?
