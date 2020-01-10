@@ -132,7 +132,7 @@ namespace GUI___semesterprojekt_1
                     //MessageBox.Show("Der er nu trykket på knappen 1. gang og en måling er i gang");
                 }
             }
-            MessageBox.Show(knapTændt.ToString());
+            //MessageBox.Show(knapTændt.ToString());
             while (knapTændt == true)
             {
                 if (startKnap.isPressed())

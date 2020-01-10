@@ -8,6 +8,7 @@ namespace GUI___semesterprojekt_1
 {
     class PulsTilBCD
     {
+        // Erklærer de 6 attributter
         private int tiere;
         private int enere;
         private string BCD;
@@ -15,6 +16,7 @@ namespace GUI___semesterprojekt_1
         private string biTiere;
         private DateTime starttid = DateTime.Now;
 
+        //Opretter cunstructoren. Denne tager en parameter
         public PulsTilBCD(int pulsen)
         {
 

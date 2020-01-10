@@ -12,14 +12,13 @@ namespace GUI___semesterprojekt_1
 {
     class Meassurement
     {
+        // Erklærer de 4 attributter
         private int calculatedPulse;
         private int numberOfPulse;
         private DateTime starttime;
         private DateTime stoptime;
 
-        //Test på 'Push' og 'pull
-
-
+        // Laver cunstructoren - denne tager tre af attributterne som parametre
         public Meassurement(DateTime Starttid, DateTime Stoptid, int antalPuls)
         {
             int tid;
@@ -27,7 +26,8 @@ namespace GUI___semesterprojekt_1
             stoptime = Stoptid;
             numberOfPulse = antalPuls;
             TimeSpan måleTid = (stoptime - starttime);
-
+            
+            //Sørger for, at vi ikke får en nulreference når pulsobjektet oprettes
             if (måleTid.TotalMinutes > 0.15)
             {
                 tid = Convert.ToInt32(Math.Round(numberOfPulse / Convert.ToDouble(måleTid.TotalMinutes)));
@@ -40,12 +40,12 @@ namespace GUI___semesterprojekt_1
 
             calculatedPulse = numberOfPulse / tid;
         }
-
+        //returnerer den beregnede puls 
         public int getPulse()
         {
             return calculatedPulse;
         }
-
+        //udskriver teksten til historikken
         public override string ToString()
         {
             return $"{starttime.ToString("dd/MM/yyyy HH:mm")}\t\t {calculatedPulse} ";
