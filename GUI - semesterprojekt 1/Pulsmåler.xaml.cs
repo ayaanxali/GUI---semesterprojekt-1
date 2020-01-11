@@ -175,7 +175,7 @@ namespace GUI___semesterprojekt_1
             {
                 resetLayout();
                 Historik_LB.Items.Clear();
-                Historik_LB.Items.Add("Dato\t\t Puls");
+                Historik_LB.Items.Add("Dato og tid \t\t Puls");
             }
         }
 
@@ -183,7 +183,7 @@ namespace GUI___semesterprojekt_1
             
         {
             _pwm.SetPWM(20);
-            Historik_LB.Items.Add("Dato\t\t\t Puls");
+            Historik_LB.Items.Add("Dato og tid\t\t Puls");
 
             cStyle.Setters.Add(new Setter(Border.CornerRadiusProperty, new CornerRadius(50.0)));
             enable(KlargørMåling_BT);
