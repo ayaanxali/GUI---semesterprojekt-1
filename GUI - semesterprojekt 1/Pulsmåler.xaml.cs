@@ -16,6 +16,7 @@ using RPI;
 using RPI.Display;
 using RPI.Controller;
 using RPI.Heart_Rate_Monitor;
+using System.Windows.Threading;
 
 namespace GUI___semesterprojekt_1
 {
@@ -77,7 +78,6 @@ namespace GUI___semesterprojekt_1
         private void Window_Closed(object sender, EventArgs e)
         {
             MessageBox.Show("Programmet lukker nu");
-            _pwm.SetPWM(0);
             _pwm.StopPWM();
             _hundredeDisplay.off();
             _sevenSeg.Close_SevenSeg();
@@ -132,6 +132,8 @@ namespace GUI___semesterprojekt_1
             // Disabler de to knapper
             disable(KlargørMåling_BT);
             disable(Reset_BT);
+            //Reset_BT.IsEnabled = false;
+            Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
 
             // Skriver 00 på sevenSeg displaysne
             _sevenSeg.Disp_SevenSeg(00);
@@ -141,7 +143,6 @@ namespace GUI___semesterprojekt_1
             {
                 if (_startKnap.isPressed())
                 {
-
                     knapTændt = true;
                     _pulseReader.StartReading();
                     _pwm.SetPWM(100);
