@@ -73,10 +73,8 @@ namespace GUI___semesterprojekt_1
             cStyle.Setters.Add(new Setter(Border.CornerRadiusProperty, new CornerRadius(50.0)));
             annuller_BT.Resources.Add(typeof(Border),cStyle);
 
+            _sevenSeg.Init_SevenSeg();
             _pwm.InitPWM();
-            _rpi.wait(200);
-            _pwm.SetPWM(20);
-
         }
 
          // Eventhandleren til annuller_BT oprettes
@@ -135,7 +133,6 @@ namespace GUI___semesterprojekt_1
         private void showPulse()
         {
             _pulsTilBCD = new PulsTilBCD(_pulseReader.getCalculatedPulse());
-            _sevenSeg.Init_SevenSeg();
             _sevenSeg.Disp_SevenSeg(_pulsTilBCD.getPulsTilBCD());
         }
 
@@ -168,13 +165,10 @@ namespace GUI___semesterprojekt_1
             if (resetBool)
             {
                 Reset_BT.Margin = new Thickness(40, 250, 0, 0);
-                
                 enable(annuller_BT);
                 disable(KlargørMåling_BT);
                 mitGitter.Children.Add(annuller_BT);
-
                 resetBool = false;
-
             }
 
             else if (resetBool == false)
@@ -188,8 +182,7 @@ namespace GUI___semesterprojekt_1
         private void Historik_LB_Loaded(object sender, RoutedEventArgs e)
             
         {
-            
-
+            _pwm.SetPWM(20);
             Historik_LB.Items.Add("Dato\t\t\t Puls");
 
             cStyle.Setters.Add(new Setter(Border.CornerRadiusProperty, new CornerRadius(50.0)));
@@ -200,12 +193,11 @@ namespace GUI___semesterprojekt_1
             Reset_BT.Resources.Add(typeof(Border), cStyle);
 
         }
-        
+       
         
         // Eventhandleren slukker for status LED og alle 7-segments displays
         private void Window_Closed(object sender, EventArgs e)
         {
-
             _pwm.StopPWM();
             _hundredeDisplay.off();
             _sevenSeg.Close_SevenSeg();
