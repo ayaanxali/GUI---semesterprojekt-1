@@ -71,16 +71,12 @@ namespace GUI___semesterprojekt_1
             annuller_BT.Margin = new Thickness(40, 170, 0, 0);
 
             cStyle.Setters.Add(new Setter(Border.CornerRadiusProperty, new CornerRadius(50.0)));
-            annuller_BT.Resources.Add(typeof(Border),cStyle);    
-        }
+            annuller_BT.Resources.Add(typeof(Border),cStyle);
 
-        // Eventhandleren slukker for status LED og alle 7-segments displays
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            MessageBox.Show("Programmet lukker nu");
-            _pwm.StopPWM();
-            _hundredeDisplay.off();
-            _sevenSeg.Close_SevenSeg();
+            _pwm.InitPWM();
+            _rpi.wait(200);
+            _pwm.SetPWM(20);
+
         }
 
          // Eventhandleren til annuller_BT oprettes
@@ -88,6 +84,44 @@ namespace GUI___semesterprojekt_1
         {
             resetLayout();
         }
+        // Eventhandler for "Klargør måling"-knappen
+        private void KlargørMåling_BT_Click(object sender, RoutedEventArgs e)
+        {
+            // Disabler de to knapper
+            disable(KlargørMåling_BT);
+            disable(Reset_BT);
+            //Reset_BT.IsEnabled = false;
+            Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
+
+            // Skriver 00 på sevenSeg displaysne
+            _sevenSeg.Disp_SevenSeg(00);
+            _hundredeDisplay.off();
+
+            while (knapTændt == false)
+            {
+                if (_startKnap.isPressed())
+                {
+                    knapTændt = true;
+                    _pulseReader.StartReading();
+                    _pwm.SetPWM(100);
+
+                }
+            }
+            while (knapTændt == true)
+            {
+                if (_startKnap.isPressed())
+                {
+                    knapTændt = false;
+                    _pulseReader.StartReading();
+                    showPulse();
+                    erOverHundrede();
+                    Historik_LB.Items.Add(_pulseReader.ReadCalculatedPulse().ToString());
+                    enable(KlargørMåling_BT);
+                    enable(Reset_BT);
+                }
+            }
+        }
+
         // Metode til at resette layoutet
         private void resetLayout()
         {
@@ -126,46 +160,11 @@ namespace GUI___semesterprojekt_1
             name.IsEnabled = true;
         }
 
-        // Eventhandler for "Klargør måling"-knappen
-        private void KlargørMåling_BT_Click(object sender, RoutedEventArgs e)
-        {
-            // Disabler de to knapper
-            disable(KlargørMåling_BT);
-            disable(Reset_BT);
-            //Reset_BT.IsEnabled = false;
-            Dispatcher.Invoke(new Action(() => { }), DispatcherPriority.ContextIdle, null);
-
-            // Skriver 00 på sevenSeg displaysne
-            _sevenSeg.Disp_SevenSeg(00);
-            _hundredeDisplay.off();
-
-            while (knapTændt == false)
-            {
-                if (_startKnap.isPressed())
-                {
-                    knapTændt = true;
-                    _pulseReader.StartReading();
-                    _pwm.SetPWM(100);
-
-                }
-            }
-            while (knapTændt == true)
-            {
-                if (_startKnap.isPressed())
-                {
-                    knapTændt = false;
-                    _pulseReader.StartReading();
-                    showPulse();
-                    erOverHundrede();
-                    Historik_LB.Items.Add(_pulseReader.ReadCalculatedPulse().ToString());
-                    enable(KlargørMåling_BT);
-                    enable(Reset_BT);
-                }
-            }
-        }
+        
         // Eventhandler for "Reset historik"-knappen
         private void Reset_BT_Click(object sender, RoutedEventArgs e)
         {
+            
             if (resetBool)
             {
                 Reset_BT.Margin = new Thickness(40, 250, 0, 0);
@@ -183,17 +182,14 @@ namespace GUI___semesterprojekt_1
                 resetLayout();
                 Historik_LB.Items.Clear();
                 Historik_LB.Items.Add("Dato\t\t Puls");
-                _pwm.SetPWM(100);
-                _rpi.wait(1000);
-                _pwm.SetPWM(20);
             }
         }
 
         private void Historik_LB_Loaded(object sender, RoutedEventArgs e)
+            
         {
-            _pwm.InitPWM();
-            _pwm.SetPWM(20);         
-            MessageBox.Show("Vi er her nu");
+            
+
             Historik_LB.Items.Add("Dato\t\t\t Puls");
 
             cStyle.Setters.Add(new Setter(Border.CornerRadiusProperty, new CornerRadius(50.0)));
@@ -202,9 +198,20 @@ namespace GUI___semesterprojekt_1
 
             KlargørMåling_BT.Resources.Add(typeof(Border), cStyle);
             Reset_BT.Resources.Add(typeof(Border), cStyle);
+
+        }
+        
+        
+        // Eventhandleren slukker for status LED og alle 7-segments displays
+        private void Window_Closed(object sender, EventArgs e)
+        {
+
+            _pwm.StopPWM();
+            _hundredeDisplay.off();
+            _sevenSeg.Close_SevenSeg();
         }
 
-        
+
 
     }
 }
