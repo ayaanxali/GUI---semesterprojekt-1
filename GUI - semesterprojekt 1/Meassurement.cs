@@ -34,7 +34,7 @@ namespace GUI___semesterprojekt_1
             }
             else
             {
-                numberOfPulse = 70;
+                numberOfPulse = 188;
                 tid = 1;
             }
 
