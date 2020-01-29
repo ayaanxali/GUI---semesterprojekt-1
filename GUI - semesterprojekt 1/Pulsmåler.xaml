@@ -14,13 +14,15 @@
             <ColumnDefinition Width="210*"/>
         </Grid.ColumnDefinitions>
 
-        <Image Grid.ColumnSpan="2" Margin= "0,0,0.334,9.667" Source= "Image3.png" Stretch= "Fill" />
+        <!--<Image Grid.ColumnSpan="2" Margin= "0,0,0.333,9.667" Source= "puls2.jpg" Stretch= "Fill" />-->
+        <Image Grid.ColumnSpan="2" Margin="0,-29,-127.667,-35.333" Source="puls2.JPG" Stretch="Fill"/>
         <Button x:Name="KlargørMåling_BT" Content="KLARGØR MÅLING" HorizontalAlignment="Left" Margin="40,90,0,0" VerticalAlignment="Top" Width="185" Height="55" Click="KlargørMåling_BT_Click" FontFamily="Yu Gothic" FontSize="18" Background="#FFD32F2F" Foreground="White"/>
 
         <Button x:Name="Reset_BT" Content="RESET HISTORIK" HorizontalAlignment="Left" Margin="40,170,0,0" VerticalAlignment="Top" Width="185" Height="55" Click="Reset_BT_Click" FontFamily="Yu Gothic" FontSize="18" Background="#FFD32F2F" Foreground="White"/>
 
         <ListBox x:Name="Historik_LB" HorizontalAlignment="Left" Height="324" Margin="85.333,52,0,0" VerticalAlignment="Top" Width="287" Loaded="Historik_LB_Loaded" Grid.Column="1"/>
         <Label Content="PULSHISTORIK" HorizontalAlignment="Left" Margin="85.333,13,0,0" VerticalAlignment="Top" FontSize="18" FontWeight="Bold" FontFamily="Yu Gothic" Width="151" Height="39" Foreground="White" Grid.Column="1"/>
+        
 
 
 

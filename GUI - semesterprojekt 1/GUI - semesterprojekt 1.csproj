@@ -108,5 +108,8 @@
   <ItemGroup>
     <Resource Include="Image3.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="puls2.JPG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
